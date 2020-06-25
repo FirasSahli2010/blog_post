@@ -1,0 +1,102 @@
+{% extends "../generic.html" %}
+
+{% block content %}
+    <div>
+        {% if post %}
+            <div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th scope="col">
+
+                                <div > <h1>{{ post.title }}</h1></div>
+                                <div>
+                                    {{ post.pub_date }}
+                                </div>
+                                <div >
+                                    {{ post.postText }}
+                                </div>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th scope="col">
+                                <div class="text textFont" style="background: #f6f6f6;">
+                                    Comments on this post
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if postComments %}
+                            {% for comment in page_obj %}
+                            {% cycle 'row1' 'row2' as rowcolors silent %}
+                                <tr class="{{ rowcolors }}">
+                                    <td>
+                                        <div>
+                                            {{ comment.visitor_name }}
+                                            <b> wrote: </b>
+                                        </div>
+                                        <div>
+                                            {{ comment.commentText }}
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                            <p style = "color:#FF0000">
+                                No comments
+                            </p>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+            <div style="height:25px;">
+                &nbsp;
+            </div>
+            <div class="text textFont" style="background: #f6f6f6;">
+                <h1> Add comment </h1>
+            </div>
+            <div>
+                {{ form.non_field_errors }}
+                <form action="{% url 'blogs:add_comment'  post.id %}" method="post">
+                    {% csrf_token %}
+                    <div>
+                        <fieldset class="module aligned">
+                            <div >
+                                {{ commentForm.visitor_name_text.errors }}
+                                <label class="required" for="{{ visitor_name_text }}">Visitor Name:</label>
+                                    {{ commentForm.visitor_name_text }}
+                            </div>
+                            <div >
+                                {{ commentForm.comment_text.errors }}
+                                <label class="required" for="{{ comment_text }}">Comment :</label>
+                                {{ commentForm.comment_text }}
+                            </div>
+                            <div class="submit-row">
+                                <input type="button" value="Reset" onClick="this.form.reset()"  />
+                                <input  type="submit" value="Comment" class="default" name="_save">
+                            </div>
+                        </fieldset>
+                    </div>
+                </form>
+            </div>
+            <div class="pagination">
+                <span class="step-links">
+                    {% if page_obj.has_previous %}
+                        <a href="?page=1">&laquo; first</a>
+                        <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                    {% endif %}
+                    <span class="current">
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                    </span>
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}">next</a>
+                        <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
+        {% else %}
+            <p>Post is not available.</p>
+        {% endif %}
+    </div>
+{% endblock %}

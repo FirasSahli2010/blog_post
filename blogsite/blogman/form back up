@@ -1,0 +1,27 @@
+<form action="{% url 'blogs:add_comment'  post.id %}" method="post">
+  {% csrf_token %}
+  <div>
+    <fieldset class="module aligned">
+      <!-- <div class="form-row ">
+        <div >
+          <label class="required" for="txtVisitorName" >Visitor Name:</label>
+          <input type="text" name="txtVisitorName" id="txtVisitorName" value="" class="vTextField" maxlength="200" required="" ></input >
+        </div>
+      </div>
+      <div class="form-row">
+        <div>
+          <label for="txtCommentText">Comment text:</label>
+
+          <textarea name="txtCommentText" id="txtCommentText" class="vLargeTextField" style="width: 594px; height: 161px;" rows="8" cols="80" required></textarea>
+        </div>
+      </div> -->
+      {{ commentForm }}
+    </fieldset>
+
+    <div class="submit-row">
+      <input type="button" value="Reset" onClick="this.form.reset()"  />
+      <input  type="submit" value="Comment" class="default" name="_save">
+    </div>
+  </div>
+  {% csrf_token %}
+</form>
